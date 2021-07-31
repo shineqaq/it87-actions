@@ -26,6 +26,7 @@ jobs:
           mkdir QTS
           wget https://liquidtelecom.dl.sourceforge.net/project/qosgpl/QNAP%20NAS%20GPL%20Source/QTS%204.5.3/GPL_QTS-4.5.3-20210602_Kernel.tar.gz -O QTS/GPL_QTS-4.5.3-20210602_Kernel.tar.gz
           cd QTS && tar -xzvf GPL_QTS-4.5.3-20210602_Kernel.tar.gz
+          cp -y ../drivers/hwmon/it87.c GPL_QTS/src/linux-4.14/drivers/hwmon/
           cd GPL_QTS/src/linux-4.14
           make modules SUBDIRS=drivers/hwmon/
           echo Build complete!
