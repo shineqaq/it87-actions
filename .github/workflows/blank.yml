@@ -42,5 +42,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: it87-driver
-          path: QTS/GPL_QTS/src/linux-4.14/drivers/hwmon/it87.ko
+          path: QTS/GPL_QTS/src/linux-4.14/drivers/hwmon/*.ko
 
