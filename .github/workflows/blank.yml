@@ -27,13 +27,14 @@ jobs:
         run: |
           echo Download qnap kernel code
           mkdir QTS
-          axel -o QTS/GPL_QTS-4.5.3-20210602_Kernel.tar.gz https://sourceforge.net/projects/qosgpl/files/QNAP%20NAS%20GPL%20Source/QTS%204.5.3/GPL_QTS-4.5.3-20210602_Kernel.tar.gz/download
+          axel -q -o QTS/GPL_QTS-4.5.3-20210602_Kernel.tar.gz https://sourceforge.net/projects/qosgpl/files/QNAP%20NAS%20GPL%20Source/QTS%204.5.3/GPL_QTS-4.5.3-20210602_Kernel.tar.gz/download
           cd QTS && tar -xzf GPL_QTS-4.5.3-20210602_Kernel.tar.gz
           cp ../drivers/hwmon/it87.c GPL_QTS/src/linux-4.14/drivers/hwmon/
           mv GPL_QTS/kernel_cfg/TS-X53B/linux-4.14-x86_64.config GPL_QTS/src/linux-4.14/.config
           cd GPL_QTS/src/linux-4.14
           echo Make
-          make oldconfig && make prepare
+          make oldconfig && make prepare && make scripts
+          echo Make driver module
           make modules SUBDIRS=drivers/hwmon/
           echo Build complete!
 
