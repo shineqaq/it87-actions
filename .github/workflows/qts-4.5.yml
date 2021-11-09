@@ -29,7 +29,7 @@ jobs:
           axel -q -o GPL_QTS-4.5.3-20210602_Kernel.tar.gz https://sourceforge.net/projects/qosgpl/files/QNAP%20NAS%20GPL%20Source/QTS%204.5.3/GPL_QTS-4.5.3-20210602_Kernel.tar.gz/download
           tar -xzf GPL_QTS-4.5.3-20210602_Kernel.tar.gz
           cp drivers/hwmon/* GPL_QTS/src/linux-4.14/drivers/hwmon/
-          mv kernel.config GPL_QTS/src/linux-4.14/.config
+          mv config/linux-4.14-x86_64.config GPL_QTS/src/linux-4.14/.config
           cd GPL_QTS/src/linux-4.14
           echo Make
           make oldconfig && make prepare && make scripts
