@@ -1,0 +1,45 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-18.04
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Install tools
+        run: sudo apt-get install -y build-essential libncurses-dev bison flex libssl-dev libelf-dev axel
+
+      # Runs a set of commands using the runners shell
+      - name: Build driver
+        run: |
+          echo Download kernel
+          axel -q -o GPL_QTS-5.0.0-20211101_Kernel.tar.gz https://sourceforge.net/projects/qosgpl/files/QNAP%20NAS%20GPL%20Source/QTS%205.0.0/GPL_QTS-5.0.0-20211101_Kernel.tar.gz/download
+          tar -xzf GPL_QTS-5.0.0-20211101_Kernel.tar.gz
+          cp drivers/hwmon/* GPL_QTS/src/linux-5.10/drivers/hwmon/
+          mv kernel-5.10.config GPL_QTS/src/linux-5.10/.config
+          cd GPL_QTS/src/linux-5.10
+          echo Make
+          make oldconfig && make prepare && make scripts
+          echo Make driver
+          make modules SUBDIRS=drivers/hwmon/
+          echo Build complete!
+
+      - name: Archive driver
+        uses: actions/upload-artifact@v2
+        with:
+          name: it87-driver
+          path: GPL_QTS/src/linux-5.10/drivers/hwmon/*.ko
+
